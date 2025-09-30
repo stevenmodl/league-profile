@@ -79,3 +79,11 @@ export function queueTypeToName(queueType: string): string {
 	};
 	return queueTypes[queueType] || "Ranked";
 }
+
+/**
+ * Get ranked emblem image path for a tier
+ */
+export function getRankedEmblem(tier: string): string {
+	const tierLower = tier.toLowerCase();
+	return `/ranked-emblems/${tierLower}.png`;
+}

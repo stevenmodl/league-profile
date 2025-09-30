@@ -60,7 +60,7 @@ export function HistoryGraph({ rankHistory }: HistoryGraphProps) {
 						Rank History
 					</CardTitle>
 				</CardHeader>
-				<CardContent className="flex items-center justify-center h-48">
+				<CardContent className="flex items-center justify-center h-full">
 					<p className="text-muted-foreground">No history data available yet</p>
 				</CardContent>
 			</Card>

@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Trophy } from "lucide-react";
 import Image from "next/image";
 import type { RankData } from "@/lib/types";
-import { formatRank, queueTypeToName } from "@/lib/mapping";
+import { formatRank, queueTypeToName, getRankedEmblem } from "@/lib/mapping";
 
 interface RankCardProps {
 	rank: RankData;
@@ -44,11 +44,10 @@ export function RankCard({ rank }: RankCardProps) {
 				<div className="flex items-center gap-6">
 					<div className="flex-shrink-0">
 						<Image
-							src="/league-of-legends-rank-emblem-gold.jpg"
+							src={getRankedEmblem(rank.tier)}
 							alt={`${displayRank} rank emblem`}
 							width={96}
 							height={96}
-							className="rounded-lg"
 						/>
 					</div>
 					<div className="space-y-1">
