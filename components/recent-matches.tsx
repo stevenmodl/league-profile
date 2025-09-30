@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Clock } from "lucide-react";
 import type { MatchData } from "@/lib/types";
-import { queueIdToName } from "@/lib/mapping";
+import { queueIdToName, isRankedQueue } from "@/lib/mapping";
 import { formatDistanceToNow } from "date-fns";
 
 interface RecentMatchesProps {
@@ -59,6 +59,17 @@ export function RecentMatches({ matches }: RecentMatchesProps) {
 										>
 											{match.win ? "Victory" : "Defeat"}
 										</div>
+										{/* LP Change for ranked games */}
+										{isRankedQueue(match.queueId) && match.lpChange !== null && (
+											<div
+												className={`text-sm font-semibold ${
+													match.lpChange > 0 ? "text-accent" : "text-destructive"
+												}`}
+											>
+												{match.lpChange > 0 ? "+" : ""}
+												{match.lpChange} LP
+											</div>
+										)}
 									</div>
 									<div className="text-sm text-muted-foreground mt-1">
 										{queueName} • {timestamp}

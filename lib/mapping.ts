@@ -52,3 +52,19 @@ export function formatRank(tier: string, rank: string): string {
 	}
 	return `${tier.charAt(0) + tier.slice(1).toLowerCase()} ${rank}`;
 }
+
+/**
+ * Check if queue is a ranked queue
+ */
+export function isRankedQueue(queueId: number): boolean {
+	return queueId === 420 || queueId === 440; // 420 = Ranked Solo/Duo, 440 = Ranked Flex
+}
+
+/**
+ * Map queue ID to queue type string for snapshot lookup
+ */
+export function queueIdToQueueType(queueId: number): string | null {
+	if (queueId === 420) return "RANKED_SOLO_5x5";
+	if (queueId === 440) return "RANKED_FLEX_SR";
+	return null;
+}

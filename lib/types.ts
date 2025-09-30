@@ -40,6 +40,7 @@ export type MatchData = {
 	champId: number;
 	champName: string;
 	role: string | null;
+	lpChange: number | null;
 };
 
 /**

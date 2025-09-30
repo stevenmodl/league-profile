@@ -50,6 +50,7 @@ model MatchAgg {
   dmgShare    Float?
   champId     Int
   role        String?
+  lpChange    Int?     // LP gain/loss for ranked games (null for non-ranked)
   Account     Account  @relation(fields: [accountSlug], references: [slug])
 
   @@index([accountSlug, createdAt])
