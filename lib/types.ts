@@ -38,6 +38,7 @@ export type MatchData = {
 	goldPerMin: number;
 	dmgShare: number | null;
 	champId: number;
+	champName: string;
 	role: string | null;
 };
 
@@ -46,6 +47,7 @@ export type MatchData = {
  */
 export type ChampionStats = {
 	champId: number;
+	champName: string;
 	games: number;
 	wins: number;
 	winrate: number;

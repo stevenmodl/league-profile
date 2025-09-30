@@ -51,7 +51,7 @@ export function RecentMatches({ matches }: RecentMatchesProps) {
 								{/* Champion & Result */}
 								<div className="flex-1 min-w-0">
 									<div className="flex items-center gap-3">
-										<div className="font-semibold text-foreground">Champion {match.champId}</div>
+										<div className="font-semibold text-foreground">{match.champName}</div>
 										<div
 											className={`text-sm font-medium ${
 												match.win ? "text-accent" : "text-destructive"

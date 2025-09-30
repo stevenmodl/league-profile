@@ -1,16 +1,22 @@
 // scripts/seed.ts
 import { seedAccounts, refreshAccount } from "../lib/repo";
+import { fetchAndStoreChampions } from "../lib/champions";
 import { ACCOUNTS } from "../lib/accounts";
 
 async function main() {
 	console.log("🚀 Starting seed process...\n");
 
-	// Step 1: Seed accounts (resolve PUUIDs)
+	// Step 1: Fetch and store champion data
+	await fetchAndStoreChampions();
+
+	console.log("\n");
+
+	// Step 2: Seed accounts (resolve PUUIDs)
 	await seedAccounts();
 
 	console.log("\n");
 
-	// Step 2: Refresh each account (fetch rank & matches)
+	// Step 3: Refresh each account (fetch rank & matches)
 	for (const acc of ACCOUNTS) {
 		try {
 			await refreshAccount(acc.slug);

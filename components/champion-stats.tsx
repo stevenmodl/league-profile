@@ -48,7 +48,7 @@ export function ChampionStats({ champs }: ChampionStatsProps) {
 
 								{/* Champion Name */}
 								<div className="flex-1 min-w-0">
-									<div className="font-semibold text-foreground">Champion {champion.champId}</div>
+									<div className="font-semibold text-foreground">{champion.champName}</div>
 									<div className="text-sm text-muted-foreground">{champion.games} games</div>
 								</div>
 

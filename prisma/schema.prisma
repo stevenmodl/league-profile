@@ -54,3 +54,12 @@ model MatchAgg {
 
   @@index([accountSlug, createdAt])
 }
+
+model Champion {
+  id        Int      @id // Champion ID (e.g., 1 for Annie)
+  key       String   // Champion key (e.g., "Annie")
+  name      String   // Champion name (e.g., "Annie")
+  title     String   // Champion title (e.g., "the Dark Child")
+  imageUrl  String   // Icon URL
+  updatedAt DateTime @default(now())
+}

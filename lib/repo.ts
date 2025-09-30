@@ -198,6 +198,10 @@ export async function getProfileData(account: Account): Promise<ProfileData> {
 		take: 10
 	});
 
+	// Get all champion data for lookups
+	const allChampions = await prisma.champion.findMany();
+	const championLookup = new Map(allChampions.map(c => [c.id, c.name]));
+
 	// Champion stats
 	const champMap = new Map<
 		number,
@@ -218,16 +222,29 @@ export async function getProfileData(account: Account): Promise<ProfileData> {
 			const winrate = stats.games > 0 ? (stats.wins / stats.games) * 100 : 0;
 			const kda =
 				stats.deaths > 0 ? (stats.kills + stats.assists) / stats.deaths : stats.kills + stats.assists;
-			return { champId, games: stats.games, wins: stats.wins, winrate, kda };
+			return {
+				champId,
+				champName: championLookup.get(champId) || `Champion ${champId}`,
+				games: stats.games,
+				wins: stats.wins,
+				winrate,
+				kda
+			};
 		})
 		.sort((a, b) => b.games - a.games)
 		.slice(0, 5);
+
+	// Enrich matches with champion names
+	const enrichedMatches = matches.map(m => ({
+		...m,
+		champName: championLookup.get(m.champId) || `Champion ${m.champId}`
+	}));
 
 	return {
 		updatedAt: latestSnapshot?.createdAt || new Date(),
 		rank,
 		rankHistory,
-		matches,
+		matches: enrichedMatches,
 		champs
 	};
 }
