@@ -4,28 +4,20 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-
-// Mock accounts for demonstration
-const MOCK_ACCOUNTS = [
-	{ id: "1", name: "Faker", tag: "KR1", region: "KR" },
-	{ id: "2", name: "Doublelift", tag: "NA1", region: "NA" },
-	{ id: "3", name: "Rekkles", tag: "EUW1", region: "EUW" },
-	{ id: "4", name: "TheShy", tag: "CN1", region: "CN" },
-	{ id: "5", name: "Caps", tag: "EUW1", region: "EUW" }
-];
+import { ACCOUNTS } from "@/lib/accounts";
 
 export function AccountSelector() {
 	const [searchQuery, setSearchQuery] = useState("");
 	const router = useRouter();
 
-	const filteredAccounts = MOCK_ACCOUNTS.filter(
+	const filteredAccounts = ACCOUNTS.filter(
 		account =>
-			account.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-			account.tag.toLowerCase().includes(searchQuery.toLowerCase())
+			account.gameName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+			account.tagLine.toLowerCase().includes(searchQuery.toLowerCase())
 	);
 
-	const handleSelectAccount = (accountId: string) => {
-		router.push(`/profile/${accountId}`);
+	const handleSelectAccount = (slug: string) => {
+		router.push(`/${slug}`);
 	};
 
 	return (
@@ -45,16 +37,16 @@ export function AccountSelector() {
 				{filteredAccounts.length > 0 ? (
 					filteredAccounts.map(account => (
 						<button
-							key={account.id}
-							onClick={() => handleSelectAccount(account.id)}
+							key={account.slug}
+							onClick={() => handleSelectAccount(account.slug)}
 							className="w-full px-4 py-3 flex items-center justify-between hover:bg-secondary/50 transition-colors text-left"
 						>
 							<div className="space-y-1">
-								<div className="font-semibold text-foreground">{account.name}</div>
-								<div className="text-sm text-muted-foreground">#{account.tag}</div>
+								<div className="font-semibold text-foreground">{account.gameName}</div>
+								<div className="text-sm text-muted-foreground">#{account.tagLine}</div>
 							</div>
 							<div className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded">
-								{account.region}
+								{account.platform.toUpperCase()}
 							</div>
 						</button>
 					))

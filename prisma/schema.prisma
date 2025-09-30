@@ -1,0 +1,55 @@
+// prisma/schema.prisma
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Account {
+  slug       String      @id
+  gameName   String
+  tagLine    String
+  platform   String
+  puuid      String
+  createdAt  DateTime    @default(now())
+  snapshots  Snapshot[]
+  matches    MatchAgg[]
+}
+
+model Snapshot {
+  id          String   @id @default(cuid())
+  accountSlug String
+  createdAt   DateTime @default(now())
+  tier        String
+  rank        String
+  lp          Int
+  wins        Int
+  losses      Int
+  hotStreak   Boolean  @default(false)
+  Account     Account  @relation(fields: [accountSlug], references: [slug])
+
+  @@index([accountSlug, createdAt])
+}
+
+model MatchAgg {
+  id          String   @id // `${matchId}:${accountSlug}`
+  accountSlug String
+  matchId     String
+  createdAt   DateTime @default(now())
+  queueId     Int
+  win         Boolean
+  k           Int
+  d           Int
+  a           Int
+  csPerMin    Float
+  goldPerMin  Float
+  dmgShare    Float?
+  champId     Int
+  role        String?
+  Account     Account  @relation(fields: [accountSlug], references: [slug])
+
+  @@index([accountSlug, createdAt])
+}

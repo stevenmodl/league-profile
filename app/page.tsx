@@ -10,7 +10,7 @@ export default function Home() {
 						<span className="block text-primary mt-2">Profile Dashboard</span>
 					</h1>
 					<p className="text-muted-foreground text-lg">
-						View detailed statistics and performance metrics for any summoner
+						View detailed statistics and performance metrics for your accounts
 					</p>
 				</div>
 
