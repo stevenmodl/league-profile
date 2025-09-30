@@ -60,27 +60,29 @@ export async function refreshAccount(slug: string): Promise<void> {
 
 	console.log(`🔄 Refreshing ${slug}...`);
 
-	// Fetch league entries
+	// Fetch league entries and save all queue types
 	try {
 		const leagues = await riot.getLeagueEntries(acc.platform, puuid);
-		const rankedSolo = leagues.find(l => l.queueType === "RANKED_SOLO_5x5");
 
-		if (rankedSolo) {
-			// Insert a snapshot
-			await prisma.snapshot.create({
-				data: {
-					accountSlug: slug,
-					tier: rankedSolo.tier,
-					rank: rankedSolo.rank,
-					lp: rankedSolo.leaguePoints,
-					wins: rankedSolo.wins,
-					losses: rankedSolo.losses,
-					hotStreak: rankedSolo.hotStreak
-				}
-			});
-			console.log(
-				`   ✅ Rank snapshot: ${rankedSolo.tier} ${rankedSolo.rank} ${rankedSolo.leaguePoints} LP`
-			);
+		if (leagues.length > 0) {
+			// Save a snapshot for each ranked queue
+			for (const league of leagues) {
+				await prisma.snapshot.create({
+					data: {
+						accountSlug: slug,
+						queueType: league.queueType,
+						tier: league.tier,
+						rank: league.rank,
+						lp: league.leaguePoints,
+						wins: league.wins,
+						losses: league.losses,
+						hotStreak: league.hotStreak
+					}
+				});
+				console.log(
+					`   ✅ Rank snapshot: ${league.tier} ${league.rank} ${league.leaguePoints} LP (${league.queueType})`
+				);
+			}
 		} else {
 			console.log(`   ⚠️  No ranked data found for ${slug}`);
 		}
@@ -152,11 +154,18 @@ export async function refreshAccount(slug: string): Promise<void> {
 export async function getProfileData(account: Account): Promise<ProfileData> {
 	const { slug } = account;
 
-	// Latest snapshot
-	const latestSnapshot = await prisma.snapshot.findFirst({
+	// Get latest snapshots for all queue types
+	const latestSnapshots = await prisma.snapshot.findMany({
 		where: { accountSlug: slug },
-		orderBy: { createdAt: "desc" }
+		orderBy: { createdAt: "desc" },
+		distinct: ["queueType"]
 	});
+
+	// Prefer RANKED_SOLO_5x5, fallback to RANKED_FLEX_SR, then any other queue
+	const latestSnapshot =
+		latestSnapshots.find(s => s.queueType === "RANKED_SOLO_5x5") ||
+		latestSnapshots.find(s => s.queueType === "RANKED_FLEX_SR") ||
+		latestSnapshots[0];
 
 	const rank = latestSnapshot
 		? {
@@ -169,12 +178,14 @@ export async function getProfileData(account: Account): Promise<ProfileData> {
 		  }
 		: null;
 
-	// Rank history (last 30 points)
-	const snapshots = await prisma.snapshot.findMany({
-		where: { accountSlug: slug },
-		orderBy: { createdAt: "desc" },
-		take: 30
-	});
+	// Rank history (last 30 points) - use the same queue type as the displayed rank
+	const snapshots = latestSnapshot
+		? await prisma.snapshot.findMany({
+				where: { accountSlug: slug, queueType: latestSnapshot.queueType },
+				orderBy: { createdAt: "desc" },
+				take: 30
+		  })
+		: [];
 
 	const rankHistory = snapshots
 		.reverse()

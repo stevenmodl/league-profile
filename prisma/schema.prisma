@@ -22,6 +22,7 @@ model Account {
 model Snapshot {
   id          String   @id @default(cuid())
   accountSlug String
+  queueType   String   // e.g., "RANKED_SOLO_5x5", "RANKED_FLEX_SR"
   createdAt   DateTime @default(now())
   tier        String
   rank        String
@@ -31,7 +32,7 @@ model Snapshot {
   hotStreak   Boolean  @default(false)
   Account     Account  @relation(fields: [accountSlug], references: [slug])
 
-  @@index([accountSlug, createdAt])
+  @@index([accountSlug, queueType, createdAt])
 }
 
 model MatchAgg {

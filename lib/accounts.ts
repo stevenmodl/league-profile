@@ -11,7 +11,8 @@ export type Account = {
 
 // Define your static accounts here
 export const ACCOUNTS: Account[] = [
-	{ slug: "gamingmaster", gameName: "GamingMaster", tagLine: "0000", platform: "euw1" }
+	{ slug: "gamingmaster", gameName: "GamingMaster", tagLine: "0000", platform: "euw1" },
+	{ slug: "gazura", gameName: "Gazura", tagLine: "EUW", platform: "euw1" }
 	// { slug: "smurf-1", gameName: "YourSmurf", tagLine: "EUW", platform: "euw1" }
 ];
 
