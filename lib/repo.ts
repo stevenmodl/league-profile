@@ -328,7 +328,8 @@ export async function getProfileData(account: Account): Promise<ProfileData> {
 				lp: latestSnapshot.lp,
 				wins: latestSnapshot.wins,
 				losses: latestSnapshot.losses,
-				hotStreak: latestSnapshot.hotStreak
+				hotStreak: latestSnapshot.hotStreak,
+				queueType: latestSnapshot.queueType
 		  }
 		: null;
 

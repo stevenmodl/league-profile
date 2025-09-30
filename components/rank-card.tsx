@@ -2,20 +2,22 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Trophy } from "lucide-react";
 import Image from "next/image";
 import type { RankData } from "@/lib/types";
-import { formatRank } from "@/lib/mapping";
+import { formatRank, queueTypeToName } from "@/lib/mapping";
 
 interface RankCardProps {
 	rank: RankData;
 }
 
 export function RankCard({ rank }: RankCardProps) {
+	const queueName = rank ? queueTypeToName(rank.queueType) : "Ranked Solo/Duo";
+
 	if (!rank) {
 		return (
 			<Card className="bg-card border-border h-full">
 				<CardHeader>
 					<CardTitle className="flex items-center gap-2 text-foreground">
 						<Trophy className="h-5 w-5 text-primary" />
-						Ranked Solo/Duo
+						{queueName}
 					</CardTitle>
 				</CardHeader>
 				<CardContent className="flex items-center justify-center h-48">
@@ -34,7 +36,7 @@ export function RankCard({ rank }: RankCardProps) {
 			<CardHeader>
 				<CardTitle className="flex items-center gap-2 text-foreground">
 					<Trophy className="h-5 w-5 text-primary" />
-					Ranked Solo/Duo
+					{queueName}
 				</CardTitle>
 			</CardHeader>
 			<CardContent className="space-y-6">

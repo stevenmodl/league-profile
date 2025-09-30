@@ -10,6 +10,7 @@ export type RankData = {
 	wins: number;
 	losses: number;
 	hotStreak?: boolean;
+	queueType: string;
 } | null;
 
 /**

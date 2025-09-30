@@ -68,3 +68,14 @@ export function queueIdToQueueType(queueId: number): string | null {
 	if (queueId === 440) return "RANKED_FLEX_SR";
 	return null;
 }
+
+/**
+ * Map queue type string to human-readable name
+ */
+export function queueTypeToName(queueType: string): string {
+	const queueTypes: Record<string, string> = {
+		RANKED_SOLO_5x5: "Ranked Solo/Duo",
+		RANKED_FLEX_SR: "Ranked Flex"
+	};
+	return queueTypes[queueType] || "Ranked";
+}

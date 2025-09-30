@@ -51,7 +51,7 @@ export function HistoryGraph({ rankHistory }: HistoryGraphProps) {
 		fullDate: format(new Date(point.t), "PPP")
 	}));
 
-	if (data.length === 0) {
+	if (data.length < 3) {
 		return (
 			<Card className="bg-card border-border h-full">
 				<CardHeader>
@@ -60,10 +60,8 @@ export function HistoryGraph({ rankHistory }: HistoryGraphProps) {
 						Rank History
 					</CardTitle>
 				</CardHeader>
-				<CardContent>
-					<div className="text-center text-muted-foreground py-8">
-						<p>No history data available yet</p>
-					</div>
+				<CardContent className="flex items-center justify-center h-48">
+					<p className="text-muted-foreground">No history data available yet</p>
 				</CardContent>
 			</Card>
 		);
