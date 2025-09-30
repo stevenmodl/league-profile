@@ -6,11 +6,11 @@ export default function Home() {
 			<div className="w-full max-w-2xl space-y-8">
 				<div className="text-center space-y-4">
 					<h1 className="text-5xl font-bold text-balance">
-						League of Legends
-						<span className="block text-primary mt-2">Profile Dashboard</span>
+						Track Your Ranked
+						<span className="block text-primary mt-2">Journey</span>
 					</h1>
 					<p className="text-muted-foreground text-lg">
-						View detailed statistics and performance metrics for your accounts
+						Monitor your rank progress, match history, and champion performance
 					</p>
 				</div>
 
