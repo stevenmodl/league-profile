@@ -4,19 +4,19 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Copy package files
-COPY package.json package-lock.json* ./
+COPY package.json yarn.lock* ./
 
 # Install dependencies
-RUN npm ci
+RUN yarn install --frozen-lockfile
 
 # Copy application files
 COPY . .
 
 # Generate Prisma Client
-RUN npx prisma generate
+RUN yarn prisma generate
 
 # Build the Next.js application
-RUN npm run build
+RUN yarn build
 
 # Production stage
 FROM node:20-alpine AS runner
