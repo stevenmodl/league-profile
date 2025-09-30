@@ -11,7 +11,11 @@
 		"prisma:migrate": "prisma migrate dev",
 		"db:push": "prisma db push",
 		"db:studio": "prisma studio",
-		"seed": "tsx scripts/seed.ts"
+		"seed": "tsx scripts/seed.ts",
+		"docker:build": "docker-compose build",
+		"docker:up": "docker-compose up -d",
+		"docker:down": "docker-compose down",
+		"docker:logs": "docker-compose logs -f"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^3.10.0",

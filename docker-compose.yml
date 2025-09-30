@@ -1,0 +1,55 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: gamingmasterlol-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: gamingmasterlol
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gamingmasterlol-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/gamingmasterlol
+      - RIOT_TOKEN=${RIOT_TOKEN}
+      - REVALIDATE_SECRET=${REVALIDATE_SECRET}
+      - CRON_SECRET=${CRON_SECRET}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: sh -c "npx prisma migrate deploy && node server.js"
+
+  cron:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gamingmasterlol-cron
+    restart: unless-stopped
+    environment:
+      - CRON_ENDPOINT=http://app:3000/api/cron
+      - CRON_SECRET=${CRON_SECRET}
+      - CRON_SCHEDULE=* * * * *
+    depends_on:
+      - app
+    entrypoint: ["dumb-init", "--"]
+    command: ["node", "/app/scripts/cron-scheduler.js"]
+
+volumes:
+  postgres_data:
